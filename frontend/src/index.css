@@ -1,52 +1,127 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #1a2740;
-  --color-cream: #f7f3ea;
-  --color-gold: #b89968;
-  --color-sage: #7d8871;
-  --color-charcoal: #1c1a17;
-  --font-serif: "Playfair Display", serif;
-  --font-sans: "Inter", sans-serif;
+  /* ─── Colors ─── */
+  --color-linen: #F5F0E4;
+  --color-ink: #211D19;
+  --color-brass: #A9803E;
+  --color-wine: #6E2A3A;
+  --color-sage: #6E7259;
+  --color-charcoal-text: #2A2622;
+  --color-paper: #FFFFFF;
+
+  /* ─── Font Families ─── */
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ─── Border Radius ─── */
+  --radius-card: 6px;
+  --radius-chip: 9999px;
+  --radius-btn: 6px;
+}
+
+/* ─── Base Styles ─── */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
-  @apply bg-cream text-charcoal font-sans antialiased;
+  font-family: var(--font-body);
+  color: var(--color-charcoal-text);
+  background-color: var(--color-linen);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  @apply font-serif;
+/* ─── Focus Visible Ring ─── */
+*:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 2px;
 }
 
-/* Subtle pattern for background */
-.bg-texture {
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23a)' opacity='0.05'/%3E%3C/svg%3E");
+/* ─── Ticket Perforated Edge ─── */
+.ticket-edge-top::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: radial-gradient(circle at 50% 0, transparent 6px, var(--color-paper) 6.5px);
+  background-size: 20px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
 }
 
-/* Custom scrollbar for elegance */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-cream);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-gold);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-navy);
+.ticket-edge-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: radial-gradient(circle at 50% 100%, transparent 6px, var(--color-paper) 6.5px);
+  background-size: 20px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
 }
 
-.fade-in-section {
-  opacity: 0;
-  transform: translateY(20px);
-  visibility: hidden;
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-  will-change: opacity, visibility;
+/* Dark ticket edges (for use on dark backgrounds) */
+.ticket-edge-top-dark::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: radial-gradient(circle at 50% 0, transparent 6px, var(--color-ink) 6.5px);
+  background-size: 20px 16px;
+  background-repeat: repeat-x;
+  pointer-events: none;
 }
-.fade-in-section.is-visible {
-  opacity: 1;
-  transform: none;
-  visibility: visible;
+
+/* ─── Scrollbar Styling ─── */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ─── Category Nav Scroll Snap ─── */
+.category-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.category-scroll > * {
+  scroll-snap-align: start;
+}
+
+/* ─── Fraunces Variable Font Helpers ─── */
+.fraunces-display {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 72, 'SOFT' 50, 'WONK' 1;
+}
+
+.fraunces-heading {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 36, 'SOFT' 30, 'WONK' 1;
+}
+
+.fraunces-body {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 12, 'SOFT' 0, 'WONK' 0;
 }
