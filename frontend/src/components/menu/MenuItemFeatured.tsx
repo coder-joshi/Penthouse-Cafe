@@ -28,7 +28,7 @@ export const MenuItemFeatured: React.FC<MenuItemFeaturedProps> = ({
       onClick={() => onItemClick(item.id)}
       className="relative w-full rounded-[6px] overflow-hidden cursor-pointer group h-full"
     >
-      <div className="h-[250px] md:h-full min-h-[250px] w-full">
+      <div className="h-[250px] md:h-[300px] w-full">
         {item.image ? (
           <img
             src={item.image}

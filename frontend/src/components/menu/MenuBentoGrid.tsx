@@ -41,7 +41,7 @@ export const MenuBentoGrid: React.FC<MenuBentoGridProps> = ({
   const allRegular = [...restFeatured, ...regularItems];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div className="col-span-1 md:col-span-2 lg:col-span-2">
         <MenuItemFeatured
           item={mainFeatured}
@@ -50,19 +50,15 @@ export const MenuBentoGrid: React.FC<MenuBentoGridProps> = ({
         />
       </div>
       
-      {allRegular.map((item, index) => {
-        // Create asymmetry in lg layout
-        const isTall = index % 3 === 0;
-        return (
-          <div key={item.id} className={isTall ? 'lg:row-span-2 lg:col-span-1' : ''}>
-            <MenuItemCard
-              item={item}
-              onItemClick={onItemClick}
-              onAddClick={onAddClick}
-            />
-          </div>
-        );
-      })}
+      {allRegular.map((item) => (
+        <div key={item.id}>
+          <MenuItemCard
+            item={item}
+            onItemClick={onItemClick}
+            onAddClick={onAddClick}
+          />
+        </div>
+      ))}
     </div>
   );
 };

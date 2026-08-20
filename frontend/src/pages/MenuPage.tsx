@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { MenuCategoryNav } from '../components/menu/MenuCategoryNav';
 import { MenuBentoGrid } from '../components/menu/MenuBentoGrid';
 import { ItemDetailSheet } from '../components/menu/ItemDetailSheet';
@@ -74,9 +74,18 @@ export const MenuPage: React.FC = () => {
     setSelectedItemId(null);
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-linen">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row pb-24 relative">
+    <div className="min-h-screen bg-linen relative">
+      <button 
+        onClick={() => navigate(-1)}
+        className="absolute top-3 left-4 z-40 text-charcoal-text/60 hover:text-charcoal-text p-2 flex items-center justify-center rounded-full bg-paper/80 backdrop-blur shadow-sm hover:bg-paper transition-colors lg:hidden"
+        aria-label="Go back"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row pb-24 relative pt-14 lg:pt-0">
         {/* Nav Sidebar / Topbar */}
         <div className="lg:w-48 shrink-0">
           <MenuCategoryNav
