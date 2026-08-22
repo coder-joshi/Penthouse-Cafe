@@ -1,7 +1,7 @@
-import React from 'react';
-import type { MenuItem } from '../../data/menu';
-import { useCartStore } from '../../store/useCartStore';
-import { VegIndicator } from '../ui/VegIndicator';
+import React from "react";
+import type { MenuItem } from "../../data/menu";
+import { useCartStore } from "../../store/useCartStore";
+import { VegIndicator } from "../ui/VegIndicator";
 
 interface MenuItemFeaturedProps {
   item: MenuItem;
@@ -39,7 +39,7 @@ export const MenuItemFeatured: React.FC<MenuItemFeaturedProps> = ({
           <div className="w-full h-full bg-sage/20" />
         )}
       </div>
-      
+
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/30 to-transparent" />
 
@@ -58,7 +58,7 @@ export const MenuItemFeatured: React.FC<MenuItemFeaturedProps> = ({
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 p-4 pb-6 flex justify-between items-end">
         <div className="flex flex-col pr-4 w-3/4">
-          <span className="font-mono text-brass text-lg mb-1">
+          <span className="font-mono text-brass-text text-lg mb-1">
             ₹{item.price}
           </span>
           <h3 className="font-display text-paper text-xl md:text-2xl mb-1 line-clamp-1">

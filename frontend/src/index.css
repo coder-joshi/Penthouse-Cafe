@@ -2,9 +2,13 @@
 
 @theme {
   /* ─── Colors ─── */
+  --color-navy: #101820;
+  --color-cream: #FDFBF7;
+  --color-gold: #C5A059;
   --color-linen: #F5F0E4;
   --color-ink: #211D19;
   --color-brass: #A9803E;
+  --color-brass-text: #ffd083;
   --color-wine: #6E2A3A;
   --color-sage: #6E7259;
   --color-charcoal-text: #2A2622;

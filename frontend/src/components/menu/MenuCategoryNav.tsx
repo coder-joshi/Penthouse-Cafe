@@ -30,7 +30,7 @@ export const MenuCategoryNav: React.FC<MenuCategoryNavProps> = ({
       </div>
 
       {/* Desktop Nav */}
-      <div className="hidden lg:flex lg:sticky lg:top-4 lg:w-48 lg:flex-col gap-2">
+      <div className="hidden lg:flex lg:sticky lg:top-4 lg:w-48 lg:flex-col gap-2 max-h-[50vh] overflow-y-auto hide-scrollbar pb-4">
         {categories.map((cat) => (
           <button
             key={cat.id}
