@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSessionStore } from '../store/useSessionStore';
-import { TableConfirmation } from '../components/landing/TableConfirmation';
-import { restaurant } from '../data/restaurant';
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSessionStore } from "../store/useSessionStore";
 
 export const LandingPage: React.FC = () => {
-  const { restaurantSlug, tableNumber } = useParams<{ restaurantSlug: string; tableNumber: string }>();
+  const { restaurantSlug, tableNumber } = useParams<{
+    restaurantSlug: string;
+    tableNumber: string;
+  }>();
   const navigate = useNavigate();
   const setSession = useSessionStore((state) => state.setSession);
 
@@ -15,7 +16,7 @@ export const LandingPage: React.FC = () => {
     }
   }, [restaurantSlug, tableNumber, setSession]);
 
-  const displayTableNumber = tableNumber || '?';
+  const displayTableNumber = tableNumber || "?";
 
   const handleViewMenu = () => {
     if (restaurantSlug && tableNumber) {
@@ -24,78 +25,112 @@ export const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-dvh flex flex-col justify-between bg-linen px-4 py-8 md:px-8">
-      {/* Top Section */}
-      <div className="text-center mt-4">
-        <h1 className="fraunces-display text-4xl md:text-5xl text-charcoal-text mb-2">
-          {restaurant.name}
-        </h1>
-        <p className="font-body text-charcoal-text/60 italic mb-2">
-          {restaurant.tagline}
-        </p>
-        <p className="text-sage font-body text-sm tracking-wide uppercase">
-          {restaurant.cuisine}
-        </p>
-      </div>
+    <section className="relative h-dvh w-full flex items-center justify-center overflow-hidden bg-ink">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url("/images/restaurant-interior-2.jpg")' }}
+      ></div>
 
-      {/* Middle Section — Table Confirmation */}
-      <div className="my-6 flex justify-center">
-        <TableConfirmation tableNumber={displayTableNumber} />
-      </div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-navy/70 mix-blend-multiply"></div>
 
-      {/* Hero Bento Section — using actual venue photos */}
-      <div className="-mx-2 mb-8 flex-1 flex flex-col justify-center max-h-[50vh]">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 h-full">
-          {/* Large image — restaurant interior with flower ceiling */}
-          <div className="col-span-1 md:col-span-2 row-span-2 relative rounded-[6px] overflow-visible min-h-[220px]">
-            <div className="absolute inset-0 -right-3 rounded-[6px] overflow-hidden">
-              <img 
-                src="/images/restaurant-interior-1.jpg"
-                alt="Restaurant interior with vintage decor" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/10 to-transparent flex items-end p-4 md:p-6">
-                <div>
-                  <p className="text-paper/60 font-mono text-xs uppercase tracking-widest mb-1">Today's Special</p>
-                  <h2 className="font-display text-paper text-xl md:text-2xl fraunces-heading">
-                    Dal Makhani
-                  </h2>
-                  <p className="font-mono text-brass text-sm mt-1">₹345</p>
-                </div>
-              </div>
-            </div>
+      {/* Watermark Motif */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none mix-blend-overlay">
+        <img src="/logo-window.png" alt="" className="h-[60vh] object-contain invert opacity-10" />
+      </div>
+      
+      {/* Header / Nav */}
+      <div className="absolute top-0 left-0 w-full z-20 flex justify-between items-center px-6 py-6 md:px-12 md:py-8">
+        {/* Logo area */}
+        <div className="flex items-center gap-3">
+          <div 
+            className="h-10 md:h-12 bg-gold shrink-0" 
+            style={{ 
+              aspectRatio: '1024/935',
+              maskImage: 'url(/logo-window.png)', 
+              WebkitMaskImage: 'url(/logo-window.png)', 
+              maskSize: 'contain', 
+              WebkitMaskSize: 'contain', 
+              maskRepeat: 'no-repeat', 
+              WebkitMaskRepeat: 'no-repeat', 
+              maskPosition: 'center', 
+              WebkitMaskPosition: 'center' 
+            }}
+          ></div>
+          <div className="flex flex-col">
+            <span className="text-cream tracking-widest text-sm md:text-lg font-display uppercase">
+              The Penthouse
+            </span>
+            <span className="text-gold tracking-[0.2em] text-[8px] md:text-[10px] uppercase">
+              At Home Sweet Home
+            </span>
           </div>
-          {/* Smaller image — wide interior shot */}
-          <div className="col-span-1 row-span-1 rounded-[6px] overflow-hidden min-h-[105px]">
-            <img 
-              src="/images/restaurant-interior-2.jpg"
-              alt="Dining area with flower ceiling" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          {/* Smaller image — bar area */}
-          <div className="col-span-1 row-span-1 rounded-[6px] overflow-hidden min-h-[105px]">
-            <img 
-              src="/images/restaurant-bar.jpg"
-              alt="Bar with arched shelving" 
-              className="w-full h-full object-cover"
-            />
-          </div>
+        </div>
+
+        {/* Links */}
+        <div className="hidden md:flex items-center gap-8">
+          <a
+            href="#"
+            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
+          >
+            Menu
+          </a>
+          <a
+            href="#"
+            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
+          >
+            Events
+          </a>
+          <a
+            href="#"
+            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
+          >
+            Catering
+          </a>
+          <a
+            href="#"
+            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
+          >
+            Visit
+          </a>
+          <button
+            onClick={handleViewMenu}
+            className="border border-gold text-cream px-6 py-2 text-xs uppercase tracking-widest font-semibold hover:bg-gold hover:text-navy transition-colors"
+          >
+            Order Now
+          </button>
         </div>
       </div>
 
-      {/* Bottom Section (Thumb Zone) */}
-      <div className="mt-auto w-full pb-4">
-        <button 
-          onClick={handleViewMenu}
-          className="bg-wine text-paper w-full max-w-sm mx-auto block py-4 px-8 font-body font-semibold text-lg rounded-[6px] hover:opacity-90 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-wine"
-        >
-          View Menu
-        </button>
-        <p className="text-charcoal-text/40 text-xs text-center mt-3 font-body">
-          Browse • Add • Order — no app needed
+      {/* Content */}
+      <div className="relative z-10 text-center text-cream px-6 max-w-3xl mx-auto flex flex-col items-center mt-12">
+        <p className="uppercase tracking-[0.3em] text-xs md:text-sm font-medium mb-6 text-gold">
+          Welcome to The Penthouse
         </p>
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight">
+          An Italian table, <br className="hidden md:block" /> above it all.
+        </h1>
+        <p className="text-cream/80 text-sm md:text-base font-light max-w-lg mb-10 leading-relaxed">
+          A tucked-away dining room for handmade pasta, warm evenings, and the
+          pleasures of lingering a little longer.
+        </p>
+
+        {/* Replaced Explore the Menu with Table Number and Order Now */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+          <div className="border border-gold text-gold px-8 py-3 uppercase tracking-widest text-sm min-w-[180px] text-center">
+            Table {displayTableNumber}
+          </div>
+          <button
+            onClick={handleViewMenu}
+            className="border border-gold text-gold px-8 py-3 uppercase tracking-widest text-sm hover:bg-gold hover:text-navy transition-colors duration-300 min-w-[180px]"
+          >
+            Order Now
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Scroll indicator */}
+    </section>
   );
 };

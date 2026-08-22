@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../../store/useCartStore';
 import { useSessionStore } from '../../store/useSessionStore';
 
 export const FloatingTicketBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { items, getTotalItems, getSubtotal, lastAddedTimestamp } = useCartStore();
   const { restaurantSlug, tableNumber } = useSessionStore();
   
@@ -12,6 +13,8 @@ export const FloatingTicketBar = () => {
   
   const totalItems = getTotalItems();
   const totalPrice = getSubtotal();
+
+  const isCartPage = location.pathname.includes('/cart');
 
   useEffect(() => {
     if (lastAddedTimestamp) {
@@ -23,7 +26,7 @@ export const FloatingTicketBar = () => {
     }
   }, [lastAddedTimestamp]);
 
-  if (totalItems === 0) return null;
+  if (totalItems === 0 || isCartPage) return null;
 
   const handleNavigate = () => {
     if (restaurantSlug && tableNumber) {
@@ -62,14 +65,8 @@ export const FloatingTicketBar = () => {
       </div>
 
       {/* Desktop Floating Ticket Bar */}
-      <div className="hidden lg:block fixed right-4 top-20 z-40 motion-safe:animate-[slideLeft_300ms_ease-out] w-80">
-        <style>{`
-          @keyframes slideLeft {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-          }
-        `}</style>
-        <div className={`bg-paper relative shadow-xl rounded-[6px] ticket-edge-top border-l-4 border-wine flex flex-col max-h-[calc(100dvh-160px)] transition-transform ${isPulsing ? 'scale-[1.03]' : ''}`}>
+      <div className="hidden lg:block fixed left-4 bottom-4 z-40 motion-safe:animate-[slideUp_300ms_ease-out] w-80">
+        <div className={`bg-paper relative shadow-xl rounded-[6px] ticket-edge-top border-l-4 border-wine flex flex-col max-h-[45vh] transition-transform ${isPulsing ? 'scale-[1.03]' : ''}`}>
           <div className="p-4 border-b border-dashed border-charcoal-text/15">
             <h3 className="fraunces-heading text-lg text-charcoal-text">Current Order</h3>
           </div>
