@@ -123,7 +123,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
         onClick={onClose}
       />
       
-      <div className={`bg-paper w-full max-w-md sm:rounded-xl rounded-t-2xl shadow-2xl flex flex-col relative max-h-[90vh] transition-transform duration-300 ${activeOpen ? 'translate-y-0 scale-100' : 'translate-y-full sm:translate-y-0 sm:scale-95'}`}>
+      <div className={`bg-paper w-full max-w-md sm:rounded-xl rounded-t-2xl shadow-2xl flex flex-col relative max-h-[85dvh] transition-transform duration-300 ${activeOpen ? 'translate-y-0 scale-100' : 'translate-y-full sm:translate-y-0 sm:scale-95'}`}>
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-charcoal-text/10 shrink-0">

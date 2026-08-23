@@ -15,6 +15,9 @@ export const MyBillSheet: React.FC<MyBillSheetProps> = ({ isOpen, onClose }) => 
   const [activeOpen, setActiveOpen] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState<number>(0);
 
   useEffect(() => {
     if (isOpen) {
@@ -27,6 +30,13 @@ export const MyBillSheet: React.FC<MyBillSheetProps> = ({ isOpen, onClose }) => 
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  // Reset drag state when completely closed
+  useEffect(() => {
+    if (!activeOpen) {
+      setDragOffset(0);
+    }
+  }, [activeOpen]);
 
   if (!shouldRender) return null;
 
@@ -48,17 +58,51 @@ export const MyBillSheet: React.FC<MyBillSheetProps> = ({ isOpen, onClose }) => 
   const hasPlacedOrders = placedOrders.length > 0;
   const hasActiveCart = activeCartItems.length > 0;
 
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setTouchStartY(e.clientY);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (touchStartY === null) return;
+    const currentY = e.clientY;
+    const offset = Math.max(0, currentY - touchStartY);
+    setDragOffset(offset);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    (e.target as HTMLElement).releasePointerCapture(e.pointerId);
+    if (dragOffset > 70) {
+      onClose();
+    } else {
+      setDragOffset(0);
+    }
+    setTouchStartY(null);
+  };
+
   return (
     <>
       {/* Backdrop */}
       <div
         className={`fixed inset-0 bg-ink/50 z-50 transition-opacity duration-300 ${activeOpen ? 'animate-fade-in' : 'animate-fade-out'}`}
         onClick={onClose}
+        style={{ opacity: activeOpen ? 1 - Math.min(dragOffset / 300, 1) : undefined }}
       />
 
       {/* Mobile Sheet */}
-      <div className={`fixed bottom-0 left-0 right-0 max-h-[92vh] bg-paper rounded-t-2xl z-50 flex flex-col lg:hidden shadow-[0_-8px_30px_rgb(0,0,0,0.12)] ${activeOpen ? 'animate-slide-in-bottom' : 'animate-slide-out-bottom'}`}>
-        <div className="w-12 h-1.5 bg-charcoal-text/20 rounded-full mx-auto mt-3 shrink-0" />
+      <div 
+        className={`fixed bottom-0 left-0 right-0 max-h-[85dvh] bg-paper rounded-t-2xl z-50 flex flex-col lg:hidden shadow-[0_-8px_30px_rgb(0,0,0,0.12)] ${activeOpen && touchStartY === null ? 'animate-slide-in-bottom transition-transform duration-300' : ''} ${!isOpen ? 'animate-slide-out-bottom' : ''}`}
+        style={{ transform: isOpen && dragOffset > 0 ? `translateY(${dragOffset}px)` : undefined }}
+      >
+        <div 
+          className="w-full pt-4 pb-2 cursor-grab active:cursor-grabbing touch-none"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          <div className="w-12 h-1.5 bg-charcoal-text/20 rounded-full mx-auto shrink-0" />
+        </div>
         <div className="overflow-y-auto flex-1 pb-6">
           <BillContent
             placedOrders={placedOrders}
