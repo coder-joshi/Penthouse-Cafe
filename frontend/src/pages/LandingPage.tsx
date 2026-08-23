@@ -68,13 +68,13 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Centered Table Number */}
-        <div className="absolute left-1/2 -translate-x-1/2 border border-gold/50 text-gold px-6 py-2 md:px-8 md:py-2.5 uppercase tracking-widest text-xs md:text-sm backdrop-blur-md bg-navy/40 rounded-sm font-semibold shadow-lg whitespace-nowrap">
-          Table {displayTableNumber}
-        </div>
-
         {/* Links */}
         <div className="flex items-center gap-4 md:gap-8">
+          {/* Table Number */}
+          <div className="border border-gold/50 text-gold px-4 py-1.5 md:px-6 md:py-2 uppercase tracking-widest text-xs md:text-sm backdrop-blur-md bg-navy/40 rounded-sm font-semibold shadow-lg whitespace-nowrap">
+            Table {displayTableNumber}
+          </div>
+
           <button
             onClick={handleViewMenu}
             className="hidden md:block border border-gold text-cream px-6 py-2 text-xs uppercase tracking-widest font-semibold hover:bg-gold hover:text-navy transition-colors"

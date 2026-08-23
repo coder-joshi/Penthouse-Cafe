@@ -116,7 +116,7 @@ export const EditCustomizationSheet: React.FC<EditCustomizationSheetProps> = ({ 
       />
 
       {/* Mobile Sheet */}
-      <div className={`fixed bottom-0 left-0 right-0 max-h-[80vh] bg-paper rounded-t-2xl z-50 flex flex-col lg:hidden shadow-[0_-8px_30px_rgb(0,0,0,0.12)] ${activeOpen ? 'animate-slide-in-bottom' : 'animate-slide-out-bottom'}`}>
+      <div className={`fixed bottom-0 left-0 right-0 max-h-[85dvh] bg-paper rounded-t-2xl z-50 flex flex-col lg:hidden shadow-[0_-8px_30px_rgb(0,0,0,0.12)] ${activeOpen ? 'animate-slide-in-bottom' : 'animate-slide-out-bottom'}`}>
         <div className="w-12 h-1.5 bg-charcoal-text/20 rounded-full mx-auto mt-3 shrink-0" />
         <div className="overflow-y-auto flex-1 pb-24">
           <SheetBody
