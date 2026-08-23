@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSessionStore } from '../store/useSessionStore';
 import { StatusTracker } from '../components/ui/StatusTracker';
+import { MyBillSheet } from '../components/cart/MyBillSheet';
 
 export const OrderConfirmationPage = () => {
   const { orderId, orderStatus, tableNumber, restaurantSlug } = useSessionStore();
+  const [isBillOpen, setIsBillOpen] = useState(false);
 
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center bg-linen relative overflow-hidden">
@@ -42,16 +45,24 @@ export const OrderConfirmationPage = () => {
           
           <Link 
             to={restaurantSlug && tableNumber ? `/r/${restaurantSlug}/t/${tableNumber}/menu` : '/'}
-            className="bg-linen text-charcoal-text w-full py-3 rounded-[6px] font-body font-medium text-center block"
+            className="bg-linen text-charcoal-text w-full py-3 rounded-[6px] font-body font-medium text-center block mb-3 hover:bg-linen/80 transition-colors"
           >
             Order More
           </Link>
+
+          <button 
+            onClick={() => setIsBillOpen(true)}
+            className="bg-brass text-ink w-full py-3 rounded-[6px] font-body font-medium text-center block hover:bg-brass/90 transition-colors"
+          >
+            View Bill & Checkout
+          </button>
           
-          <p className="text-charcoal-text/40 text-xs text-center mt-4">
+          <p className="text-charcoal-text/40 text-xs text-center mt-6">
             Your waiter will bring your order to the table
           </p>
         </div>
       </div>
+      <MyBillSheet isOpen={isBillOpen} onClose={() => setIsBillOpen(false)} />
     </div>
   );
 };

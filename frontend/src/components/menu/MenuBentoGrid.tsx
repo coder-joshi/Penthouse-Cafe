@@ -6,13 +6,11 @@ import { MenuItemFeatured } from './MenuItemFeatured';
 interface MenuBentoGridProps {
   items: MenuItem[];
   onItemClick: (id: string) => void;
-  onAddClick: (item: MenuItem) => void;
 }
 
 export const MenuBentoGrid: React.FC<MenuBentoGridProps> = ({
   items,
   onItemClick,
-  onAddClick,
 }) => {
   if (!items.length) return null;
 
@@ -28,7 +26,6 @@ export const MenuBentoGrid: React.FC<MenuBentoGridProps> = ({
             <MenuItemCard
               item={item}
               onItemClick={onItemClick}
-              onAddClick={onAddClick}
             />
           </div>
         ))}
@@ -46,7 +43,6 @@ export const MenuBentoGrid: React.FC<MenuBentoGridProps> = ({
         <MenuItemFeatured
           item={mainFeatured}
           onItemClick={onItemClick}
-          onAddClick={onAddClick}
         />
       </div>
       
@@ -55,7 +51,6 @@ export const MenuBentoGrid: React.FC<MenuBentoGridProps> = ({
           <MenuItemCard
             item={item}
             onItemClick={onItemClick}
-            onAddClick={onAddClick}
           />
         </div>
       ))}

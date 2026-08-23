@@ -6,13 +6,11 @@ import { VegIndicator } from "../ui/VegIndicator";
 interface MenuItemFeaturedProps {
   item: MenuItem;
   onItemClick: (id: string) => void;
-  onAddClick: (item: MenuItem) => void;
 }
 
 export const MenuItemFeatured: React.FC<MenuItemFeaturedProps> = ({
   item,
   onItemClick,
-  onAddClick,
 }) => {
   const { items: cartItems } = useCartStore();
   const cartItem = cartItems.find((c) => c.id === item.id);
@@ -20,7 +18,7 @@ export const MenuItemFeatured: React.FC<MenuItemFeaturedProps> = ({
 
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onAddClick(item);
+    onItemClick(item.id);
   };
 
   return (

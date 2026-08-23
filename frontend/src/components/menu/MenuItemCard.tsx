@@ -7,13 +7,11 @@ import { VegIndicator } from '../ui/VegIndicator';
 interface MenuItemCardProps {
   item: MenuItem;
   onItemClick: (id: string) => void;
-  onAddClick: (item: MenuItem) => void;
 }
 
 export const MenuItemCard: React.FC<MenuItemCardProps> = ({
   item,
   onItemClick,
-  onAddClick,
 }) => {
   const { items: cartItems, updateQuantity, removeItem } = useCartStore();
   const cartItem = cartItems.find((c) => c.id === item.id);
@@ -21,11 +19,12 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
   const handleAdd = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onAddClick(item);
+    onItemClick(item.id);
   };
 
-  const handleIncrease = () => {
-    if (cartItem) updateQuantity(cartItem.cartItemId, quantity + 1);
+  const handleIncrease = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    onItemClick(item.id);
   };
 
   const handleDecrease = () => {

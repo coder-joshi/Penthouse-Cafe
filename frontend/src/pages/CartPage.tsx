@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useCartStore } from '../store/useCartStore';
+import { useCartStore, type CartItem } from '../store/useCartStore';
 import { useSessionStore } from '../store/useSessionStore';
 import { CartLineItem } from '../components/cart/CartLineItem';
 import { OrderSummary } from '../components/cart/OrderSummary';
+import { EditCustomizationSheet } from '../components/cart/EditCustomizationSheet';
 
 export const CartPage = () => {
   const navigate = useNavigate();
   const { items, clearCart, getSubtotal, getTax, getTotal } = useCartStore();
-  const { tableNumber, restaurantSlug, setOrder } = useSessionStore();
+  const { tableNumber, restaurantSlug, setOrder, addPlacedOrder } = useSessionStore();
   const [specialInstructions, setSpecialInstructions] = useState('');
+  const [editingItem, setEditingItem] = useState<CartItem | null>(null);
 
   const subtotal = getSubtotal();
   const tax = getTax();
@@ -25,12 +27,24 @@ export const CartPage = () => {
 
   const handlePlaceOrder = () => {
     const orderId = `TT-${Math.floor(1000 + Math.random() * 9000)}`;
+    
+    // Save the current cart to order history before clearing
+    addPlacedOrder({
+      orderId,
+      items: [...items],
+      subtotal,
+      tax,
+      total,
+      placedAt: Date.now(),
+    });
+
     setOrder(orderId);
     clearCart();
     navigate(confirmPath);
   };
 
   return (
+    <>
     <div className="min-h-screen bg-linen pb-8 flex flex-col">
       {/* Ticket Header */}
       <div className="relative pt-10 px-4">
@@ -63,7 +77,7 @@ export const CartPage = () => {
           <>
             <div className="mb-8 bg-paper rounded-[6px] p-4 shadow-sm border border-charcoal-text/5">
               {items.map((item) => (
-                <CartLineItem key={item.cartItemId} item={item} />
+                <CartLineItem key={item.cartItemId} item={item} onEditClick={(item) => setEditingItem(item)} />
               ))}
 
               <textarea 
@@ -97,5 +111,13 @@ export const CartPage = () => {
         )}
       </div>
     </div>
+
+    {/* Edit Customization Sheet */}
+    <EditCustomizationSheet
+      cartItem={editingItem}
+      isOpen={editingItem !== null}
+      onClose={() => setEditingItem(null)}
+    />
+  </>
   );
 };

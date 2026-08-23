@@ -35,8 +35,8 @@ export const categories: MenuCategory[] = [
   { id: 'mains-veg', name: 'Mains — Veg', description: 'Hearty vegetarian mains' },
   { id: 'mains-non-veg', name: 'Mains — Non-Veg', description: 'From the tandoor and the wok' },
   { id: 'breads', name: 'Breads', description: 'Fresh from the clay oven' },
-  { id: 'beverages', name: 'Beverages', description: 'Crafted drinks & classics' },
   { id: 'desserts', name: 'Desserts', description: 'A sweet finish' },
+  { id: 'beverages', name: 'Beverages', description: 'Crafted drinks & classics' },
 ];
 
 const spiceCustomization: Customization = {
@@ -377,7 +377,7 @@ export const menuItems: MenuItem[] = [
     isVeg: true,
     isFeatured: false,
     spiceLevel: 0,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed514?w=600&h=400&fit=crop',
+    image: '/images/fresh-lime-soda.jpg',
     customizations: [
       {
         id: 'lime-style',

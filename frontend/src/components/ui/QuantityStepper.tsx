@@ -2,8 +2,8 @@ import React from 'react';
 
 interface QuantityStepperProps {
   quantity: number;
-  onIncrement: () => void;
-  onDecrement: () => void;
+  onIncrement: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onDecrement: (e: React.MouseEvent<HTMLButtonElement>) => void;
   size?: 'sm' | 'md';
 }
 

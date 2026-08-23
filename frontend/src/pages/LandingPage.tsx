@@ -28,7 +28,7 @@ export const LandingPage: React.FC = () => {
     <section className="relative h-dvh w-full flex items-center justify-center overflow-hidden bg-ink">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-ken-burns"
         style={{ backgroundImage: 'url("/images/restaurant-interior-2.jpg")' }}
       ></div>
 
@@ -41,11 +41,11 @@ export const LandingPage: React.FC = () => {
       </div>
       
       {/* Header / Nav */}
-      <div className="absolute top-0 left-0 w-full z-20 flex justify-between items-center px-6 py-6 md:px-12 md:py-8">
+      <div className="absolute top-0 left-0 w-full z-20 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 backdrop-blur-md bg-navy/30 border-b border-white/10">
         {/* Logo area */}
         <div className="flex items-center gap-3">
           <div 
-            className="h-10 md:h-12 bg-gold shrink-0" 
+            className="h-10 md:h-12 bg-white shrink-0" 
             style={{ 
               aspectRatio: '1024/935',
               maskImage: 'url(/logo-window.png)', 
@@ -58,7 +58,7 @@ export const LandingPage: React.FC = () => {
               WebkitMaskPosition: 'center' 
             }}
           ></div>
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center">
             <span className="text-cream tracking-widest text-sm md:text-lg font-display uppercase">
               The Penthouse
             </span>
@@ -68,35 +68,16 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Centered Table Number */}
+        <div className="absolute left-1/2 -translate-x-1/2 border border-gold/50 text-gold px-6 py-2 md:px-8 md:py-2.5 uppercase tracking-widest text-xs md:text-sm backdrop-blur-md bg-navy/40 rounded-sm font-semibold shadow-lg whitespace-nowrap">
+          Table {displayTableNumber}
+        </div>
+
         {/* Links */}
-        <div className="hidden md:flex items-center gap-8">
-          <a
-            href="#"
-            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
-          >
-            Menu
-          </a>
-          <a
-            href="#"
-            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
-          >
-            Events
-          </a>
-          <a
-            href="#"
-            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
-          >
-            Catering
-          </a>
-          <a
-            href="#"
-            className="text-cream text-xs uppercase tracking-widest font-semibold hover:text-gold transition-colors"
-          >
-            Visit
-          </a>
+        <div className="flex items-center gap-4 md:gap-8">
           <button
             onClick={handleViewMenu}
-            className="border border-gold text-cream px-6 py-2 text-xs uppercase tracking-widest font-semibold hover:bg-gold hover:text-navy transition-colors"
+            className="hidden md:block border border-gold text-cream px-6 py-2 text-xs uppercase tracking-widest font-semibold hover:bg-gold hover:text-navy transition-colors"
           >
             Order Now
           </button>
@@ -105,25 +86,22 @@ export const LandingPage: React.FC = () => {
 
       {/* Content */}
       <div className="relative z-10 text-center text-cream px-6 max-w-3xl mx-auto flex flex-col items-center mt-12">
-        <p className="uppercase tracking-[0.3em] text-xs md:text-sm font-medium mb-6 text-gold">
+        <p className="uppercase tracking-[0.3em] text-xs md:text-sm font-medium mb-6 text-gold animate-slide-up-fade">
           Welcome to The Penthouse
         </p>
-        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight">
+        <h1 className="font-display text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight animate-slide-up-fade delay-100">
           An Italian table, <br className="hidden md:block" /> above it all.
         </h1>
-        <p className="text-cream/80 text-sm md:text-base font-light max-w-lg mb-10 leading-relaxed">
+        <p className="text-cream/80 text-sm md:text-base font-light max-w-lg mb-10 leading-relaxed animate-slide-up-fade delay-200">
           A tucked-away dining room for handmade pasta, warm evenings, and the
           pleasures of lingering a little longer.
         </p>
 
         {/* Replaced Explore the Menu with Table Number and Order Now */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-          <div className="border border-gold text-gold px-8 py-3 uppercase tracking-widest text-sm min-w-[180px] text-center">
-            Table {displayTableNumber}
-          </div>
+        <div className="flex justify-center w-full animate-slide-up-fade delay-300">
           <button
             onClick={handleViewMenu}
-            className="border border-gold text-gold px-8 py-3 uppercase tracking-widest text-sm hover:bg-gold hover:text-navy transition-colors duration-300 min-w-[180px]"
+            className="border border-gold text-gold px-8 py-3 uppercase tracking-widest text-sm hover:bg-gold hover:text-navy transition-all duration-300 min-w-[180px] hover:scale-105 animate-glow"
           >
             Order Now
           </button>

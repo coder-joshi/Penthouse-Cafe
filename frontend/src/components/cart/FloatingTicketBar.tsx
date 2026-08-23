@@ -49,7 +49,7 @@ export const FloatingTicketBar = () => {
         <div className="mx-3 mb-3">
           <button 
             onClick={handleNavigate}
-            className={`w-full bg-paper relative shadow-lg rounded-[6px] ticket-edge-top motion-safe:hover:rotate-[-0.3deg] transition-transform ${isPulsing ? 'scale-[1.03]' : ''} border-l-4 border-wine`}
+            className={`floating-cart-target w-full bg-paper relative shadow-lg rounded-[6px] ticket-edge-top motion-safe:hover:rotate-[-0.3deg] transition-transform ${isPulsing ? 'animate-pop' : ''} border-l-4 border-wine`}
           >
             <div className="px-4 py-3 flex items-center justify-between text-left">
               <div>
@@ -66,7 +66,7 @@ export const FloatingTicketBar = () => {
 
       {/* Desktop Floating Ticket Bar */}
       <div className="hidden lg:block fixed left-4 bottom-4 z-40 motion-safe:animate-[slideUp_300ms_ease-out] w-80">
-        <div className={`bg-paper relative shadow-xl rounded-[6px] ticket-edge-top border-l-4 border-wine flex flex-col max-h-[45vh] transition-transform ${isPulsing ? 'scale-[1.03]' : ''}`}>
+        <div className={`floating-cart-target bg-paper relative shadow-xl rounded-[6px] ticket-edge-top border-l-4 border-wine flex flex-col max-h-[45vh] transition-transform ${isPulsing ? 'animate-pop' : ''}`}>
           <div className="p-4 border-b border-dashed border-charcoal-text/15">
             <h3 className="fraunces-heading text-lg text-charcoal-text">Current Order</h3>
           </div>

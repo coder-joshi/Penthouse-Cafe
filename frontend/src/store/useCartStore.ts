@@ -25,6 +25,7 @@ interface CartState {
   addItem: (item: Omit<CartItem, 'cartItemId' | 'quantity' | 'specialInstructions'>, quantity?: number) => void;
   removeItem: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
+  updateItemCustomizations: (oldCartItemId: string, newCustomizations: CartItemCustomization[]) => void;
   updateSpecialInstructions: (cartItemId: string, instructions: string) => void;
   clearCart: () => void;
   getSubtotal: () => number;
@@ -90,6 +91,44 @@ export const useCartStore = create<CartState>()(
               item.cartItemId === cartItemId ? { ...item, quantity } : item
             ),
           };
+        });
+      },
+
+      updateItemCustomizations: (oldCartItemId, newCustomizations) => {
+        set((state) => {
+          const oldItemIndex = state.items.findIndex(i => i.cartItemId === oldCartItemId);
+          if (oldItemIndex === -1) return state;
+
+          const oldItem = state.items[oldItemIndex];
+          const newCartItemId = generateCartItemId(oldItem.id, newCustomizations);
+
+          // Same customizations — just update in place
+          if (newCartItemId === oldCartItemId) {
+            const newItems = [...state.items];
+            newItems[oldItemIndex] = { ...oldItem, customizations: newCustomizations };
+            return { items: newItems };
+          }
+
+          // If new combo already exists in cart, merge quantities
+          const existingTargetIndex = state.items.findIndex(i => i.cartItemId === newCartItemId);
+          if (existingTargetIndex > -1) {
+            const newItems = state.items.filter((_, idx) => idx !== oldItemIndex);
+            const updatedTargetIndex = newItems.findIndex(i => i.cartItemId === newCartItemId);
+            newItems[updatedTargetIndex] = {
+              ...newItems[updatedTargetIndex],
+              quantity: newItems[updatedTargetIndex].quantity + oldItem.quantity
+            };
+            return { items: newItems };
+          }
+
+          // Otherwise update in place with new ID
+          const newItems = [...state.items];
+          newItems[oldItemIndex] = { 
+            ...oldItem, 
+            cartItemId: newCartItemId, 
+            customizations: newCustomizations 
+          };
+          return { items: newItems };
         });
       },
 
