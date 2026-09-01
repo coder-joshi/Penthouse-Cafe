@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-// CORS — allow Vite dev server
+// CORS — allow Vite dev server & production frontend
 app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:5173",
@@ -16,15 +16,30 @@ app.use((req, res, next) => {
     "http://10.126.72.80:5173",
     "http://10.126.72.80:5174",
   ];
+  
+  // Add production frontend URL from environment variable if it exists
+  if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+  }
+
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
+  } else if (origin) {
+    // Optional: Allow all if testing, or be strict. For Render/Vercel setup, it's safer to just reflect the origin if we want to be flexible, but let's stick to allowed origins.
+    // For now, if no match, we don't set the header. 
   }
+  
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,x-guest-token");
   if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
+});
+
+// Ping endpoint for 15 min keep-alive
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
 });
 
 app.use(express.json());
