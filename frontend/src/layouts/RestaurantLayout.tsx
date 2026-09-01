@@ -15,7 +15,7 @@ export const RestaurantLayout = () => {
       <main className={`flex-1 w-full ${isLandingPage ? '' : 'max-w-7xl mx-auto pb-24 lg:pb-0'}`}>
         <Outlet />
       </main>
-      
+
       {!isLandingPage && <FloatingTicketBar />}
     </div>
   );

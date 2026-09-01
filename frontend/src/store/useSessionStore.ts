@@ -15,7 +15,7 @@ interface SessionState {
   restaurantSlug: string | null;
   tableNumber: string | null;
   orderId: string | null;
-  orderStatus: 'idle' | 'received' | 'preparing' | 'served';
+  orderStatus: 'idle' | 'received' | 'preparing' | 'ready' | 'served';
   placedOrders: PlacedOrder[];
   isBillSettled: boolean;
   paymentMethod: 'upi' | 'card' | 'cash' | null;
@@ -24,7 +24,7 @@ interface SessionState {
 
   setSession: (slug: string, table: string) => void;
   setOrder: (orderId: string) => void;
-  setOrderStatus: (status: 'idle' | 'received' | 'preparing' | 'served') => void;
+  setOrderStatus: (status: 'idle' | 'received' | 'preparing' | 'ready' | 'served') => void;
   addPlacedOrder: (order: PlacedOrder) => void;
   getGrandTotal: () => number;
   getTotalOrderedItems: () => number;
