@@ -2,16 +2,21 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCartStore, type CartItem } from '../store/useCartStore';
 import { useSessionStore } from '../store/useSessionStore';
+import { useGuestStore } from '../store/useGuestStore';
 import { CartLineItem } from '../components/cart/CartLineItem';
 import { OrderSummary } from '../components/cart/OrderSummary';
 import { EditCustomizationSheet } from '../components/cart/EditCustomizationSheet';
+import { guestApi } from '../lib/axios';
 
 export const CartPage = () => {
   const navigate = useNavigate();
   const { items, clearCart, getSubtotal, getTax, getTotal } = useCartStore();
   const { tableNumber, restaurantSlug, setOrder, addPlacedOrder } = useSessionStore();
+  const { sessionToken } = useGuestStore();
   const [specialInstructions, setSpecialInstructions] = useState('');
   const [editingItem, setEditingItem] = useState<CartItem | null>(null);
+  const [placing, setPlacing] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   const subtotal = getSubtotal();
   const tax = getTax();
@@ -25,23 +30,63 @@ export const CartPage = () => {
     ? `/r/${restaurantSlug}/t/${tableNumber}/order-confirmation`
     : '/';
 
-  const handlePlaceOrder = () => {
-    const orderId = `TT-${Math.floor(1000 + Math.random() * 9000)}`;
-    
-    // Save the current cart to order history before clearing
-    addPlacedOrder({
-      orderId,
-      items: [...items],
-      subtotal,
-      tax,
-      total,
-      placedAt: Date.now(),
-    });
+  const handlePlaceOrder = async () => {
+    if (placing || items.length === 0) return;
+    setPlacing(true);
+    setOrderError(null);
 
-    setOrder(orderId);
-    clearCart();
-    navigate(confirmPath);
+    try {
+      const orderItems = items.map((item) => ({
+        menuItemId: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        customizations: item.customizations.map((c) => ({
+          customizationId: c.customizationId,
+          label: c.label,
+          value: c.value,
+          extraPrice: c.extraPrice,
+        })),
+        specialInstructions: item.specialInstructions,
+      }));
+
+      const res = await guestApi.post(
+        '/orders',
+        {
+          tableNumber,
+          restaurantSlug,
+          items: orderItems,
+          subtotal,
+          tax,
+          total,
+          specialInstructions,
+        },
+        {
+          headers: { 'x-guest-token': sessionToken ?? '' },
+        }
+      );
+
+      const order = res.data.data;
+
+      addPlacedOrder({
+        orderId: order._id,
+        items: [...items],
+        subtotal,
+        tax,
+        total,
+        placedAt: Date.now(),
+      });
+
+      setOrder(order._id);
+      clearCart();
+      navigate(confirmPath);
+    } catch {
+      setOrderError('Could not place your order. Please try again.');
+    } finally {
+      setPlacing(false);
+    }
   };
+
 
   return (
     <>
@@ -94,11 +139,15 @@ export const CartPage = () => {
 
             {/* Place Order CTA — Thumb zone */}
             <div className="mt-4 pb-4">
+              {orderError && (
+                <p className="text-wine text-sm text-center mb-3 animate-fade-in">{orderError}</p>
+              )}
               <button 
                 onClick={handlePlaceOrder}
-                className="bg-wine text-paper w-full py-4 rounded-[6px] font-body font-semibold text-lg hover:bg-wine/90 transition-colors min-h-[52px]"
+                disabled={placing}
+                className="bg-wine text-paper w-full py-4 rounded-[6px] font-body font-semibold text-lg hover:bg-wine/90 transition-colors min-h-[52px] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Place Order — ₹{total}
+                {placing ? 'Placing order…' : `Place Order — ₹${total}`}
               </button>
               
               <div className="text-center mt-3">

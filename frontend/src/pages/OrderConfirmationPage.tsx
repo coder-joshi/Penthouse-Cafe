@@ -1,12 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSessionStore } from '../store/useSessionStore';
+import { useGuestStore } from '../store/useGuestStore';
 import { StatusTracker } from '../components/ui/StatusTracker';
 import { MyBillSheet } from '../components/cart/MyBillSheet';
+import { useOrderSocket } from '../hooks/useOrderSocket';
+import { guestApi } from '../lib/axios';
 
 export const OrderConfirmationPage = () => {
-  const { orderId, orderStatus, tableNumber, restaurantSlug } = useSessionStore();
+  const { orderId, orderStatus, setOrderStatus, tableNumber, restaurantSlug } = useSessionStore();
+  const { sessionToken } = useGuestStore();
   const [isBillOpen, setIsBillOpen] = useState(false);
+
+  // Connect to socket — live status updates from admin
+  useOrderSocket();
+
+  // Fetch the latest order status on mount (in case of page refresh)
+  useEffect(() => {
+    if (!orderId || !tableNumber) return;
+
+    const fetchLatestStatus = async () => {
+      try {
+        const res = await guestApi.get(`/orders/table/${tableNumber}`, {
+          headers: { 'x-guest-token': sessionToken ?? '' },
+        });
+        const orders = res.data.data;
+        // Find the current order and sync status
+        const currentOrder = orders.find((o: any) => o._id === orderId);
+        if (currentOrder && currentOrder.status !== orderStatus) {
+          setOrderStatus(currentOrder.status);
+        }
+      } catch (error) {
+        console.error('Failed to sync order status on mount', error);
+      }
+    };
+
+    fetchLatestStatus();
+  }, [orderId, tableNumber, sessionToken, orderStatus, setOrderStatus]);
 
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center bg-linen relative overflow-hidden">
@@ -23,7 +53,7 @@ export const OrderConfirmationPage = () => {
           <h1 className="fraunces-display text-3xl text-charcoal-text mt-4">Order Placed!</h1>
           
           <div className="font-mono text-brass text-2xl font-bold tracking-wider mt-2">
-            #{orderId || 'TT-0042'}
+            #{orderId?.slice(-6).toUpperCase() || 'TT-0042'}
           </div>
           
           <div className="font-mono text-charcoal-text/50 text-sm mt-1">
@@ -52,9 +82,14 @@ export const OrderConfirmationPage = () => {
 
           <button 
             onClick={() => setIsBillOpen(true)}
-            className="bg-brass text-ink w-full py-3 rounded-[6px] font-body font-medium text-center block hover:bg-brass/90 transition-colors"
+            disabled={orderStatus !== 'served'}
+            className={`w-full py-3 rounded-[6px] font-body font-medium text-center block transition-colors ${
+              orderStatus === 'served'
+                ? 'bg-brass text-ink hover:bg-brass/90'
+                : 'bg-brass/30 text-charcoal-text/50 cursor-not-allowed'
+            }`}
           >
-            View Bill & Checkout
+            {orderStatus === 'served' ? 'View Bill & Checkout' : 'Checkout (Wait for Order)'}
           </button>
           
           <p className="text-charcoal-text/40 text-xs text-center mt-6">

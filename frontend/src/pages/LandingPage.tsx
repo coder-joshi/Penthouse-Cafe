@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSessionStore } from "../store/useSessionStore";
+import { useGuestStore } from "../store/useGuestStore";
 
 export const LandingPage: React.FC = () => {
   const { restaurantSlug, tableNumber } = useParams<{
@@ -9,6 +10,7 @@ export const LandingPage: React.FC = () => {
   }>();
   const navigate = useNavigate();
   const setSession = useSessionStore((state) => state.setSession);
+  const { isRegistered, tableNumber: guestTable, restaurantSlug: guestSlug } = useGuestStore();
 
   useEffect(() => {
     if (restaurantSlug && tableNumber) {
@@ -19,10 +21,18 @@ export const LandingPage: React.FC = () => {
   const displayTableNumber = tableNumber || "?";
 
   const handleViewMenu = () => {
-    if (restaurantSlug && tableNumber) {
+    if (!restaurantSlug || !tableNumber) return;
+
+    // Check if guest is registered for this specific table
+    const registeredHere = isRegistered && guestTable === tableNumber && guestSlug === restaurantSlug;
+
+    if (registeredHere) {
       navigate(`/r/${restaurantSlug}/t/${tableNumber}/menu`);
+    } else {
+      navigate(`/r/${restaurantSlug}/t/${tableNumber}/register`);
     }
   };
+
 
   return (
     <section className="relative h-dvh w-full flex items-center justify-center overflow-hidden bg-ink">
