@@ -43,19 +43,19 @@ The app separates the frontend presentation layer from the backend REST API, con
 
 ```mermaid
 graph TD
-    Client[Guest / Admin Browser]
-    Vite[Frontend - React + Vite]
-    Express[Backend - Node.js + Express]
-    Mongo[(MongoDB)]
+    Client["Guest / Admin Browser"]
+    Vite["Frontend - React + Vite"]
+    Express["Backend - Node.js + Express"]
+    Mongo[("MongoDB")]
     
-    Client <-->|HTTPS (REST)| Vite
-    Client <-->|WebSockets (Socket.io)| Express
-    Vite <-->|API Calls (Axios)| Express
-    Express <-->|Mongoose ODM| Mongo
+    Client <-->|"HTTPS REST"| Vite
+    Client <-->|"WebSockets Socket.io"| Express
+    Vite <-->|"API Calls Axios"| Express
+    Express <-->|"Mongoose ODM"| Mongo
 
     subgraph Auth Flows
-        GAuth[Guest: Session/Token based]
-        AAuth[Admin: JWT Access + Refresh]
+        GAuth["Guest: Session/Token based"]
+        AAuth["Admin: JWT Access + Refresh"]
     end
 ```
 
