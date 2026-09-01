@@ -1,6 +1,10 @@
 import "dotenv/config";
 import mongoose from "mongoose";
+import dns from "node:dns";
 import User from "./src/modules/auth/auth.model.js";
+
+// Force Google DNS to fix querySrv ECONNREFUSED error on Windows/certain networks
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 async function createAdmin() {
   try {
